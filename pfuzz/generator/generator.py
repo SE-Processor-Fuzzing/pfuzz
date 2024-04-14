@@ -2,7 +2,7 @@ import subprocess
 import random
 from typing import Dict
 import os
-import constants
+import pfuzz.constants
 
 
 class Generator:
@@ -15,15 +15,13 @@ class Generator:
             if random.randint(0, 1):
                 config[flag] = str(random.choice(self.template_config[flag]))
 
-    def generate(
-        self, c_name: str, out_name: str, config: Dict[str, str] = None
-    ) -> None:
+    def generate(self, config: Dict[str, str], c_name: str, out_name: str) -> None:
         config = config if config else dict()
         if not config:
             self.generate_config(config)
 
         out_dir = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)), constants.OUT_DIR
+            os.path.dirname(os.path.realpath(__file__)), pfuzz.constants.OUT_DIR
         )
         if not os.path.isdir(out_dir):
             os.mkdir(out_dir)
