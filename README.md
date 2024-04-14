@@ -1,3 +1,4 @@
+[![Build status][status-shield]][status-url]
 [![MIT License][license-shield]][license-url]
 
 # pfuzz
@@ -64,3 +65,5 @@ Open the terminal and follow these steps:
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [license-shield]: https://img.shields.io/github/license/SE-Processor-Fuzzing/pfuzz.svg?style=for-the-badge&color=blue
 [license-url]: LICENSE
+[status-shield]: https://img.shields.io/github/actions/workflow/status/SE-Processor-Fuzzing/pfuzz/.github/workflows/ci.yml?branch=main&event=push&style=for-the-badge
+[status-url]: https://github.com/SE-Processor-Fuzzing/pfuzz/blob/main/.github/workflows/ci.yml
