@@ -16,7 +16,6 @@ class Generator:
                 config[flag] = str(random.choice(self.template_config[flag]))
 
     def generate(self, config: Dict[str, str], c_name: str, out_name: str) -> None:
-        config = config if config else dict()
         if not config:
             self.generate_config(config)
 
