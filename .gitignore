@@ -167,3 +167,6 @@ cython_debug/
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+pfuzz/generator/test.py
+pfuzz/generator/generated
