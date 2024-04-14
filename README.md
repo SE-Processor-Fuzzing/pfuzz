@@ -18,6 +18,8 @@ Simulated processor fuzzing tool.
 
 - [Python 3.10+ with pip 19.0+](https://wiki.python.org/moin/BeginnersGuide/Download)
 - [pipx](https://pypa.github.io/pipx/#install-pipx)
+- [Csmith](https://github.com/csmith-project/csmith)
+- `gcc-riscv64-linux-gnu`
 
 ### Installation
 
