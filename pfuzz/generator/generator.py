@@ -1,7 +1,9 @@
-import subprocess
-import random
-from typing import Dict
 import os
+import random
+import subprocess
+from pathlib import Path
+from typing import Dict
+
 import pfuzz.constants
 
 
@@ -10,7 +12,6 @@ class Generator:
         self.template_config = template_config
 
     def generate_config(self, config: Dict[str, str]) -> None:
-        config = dict()
         for flag in self.template_config.keys():
             if random.randint(0, 1):
                 config[flag] = str(random.choice(self.template_config[flag]))
@@ -19,11 +20,9 @@ class Generator:
         if not config:
             self.generate_config(config)
 
-        out_dir = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)), pfuzz.constants.OUT_DIR
-        )
-        if not os.path.isdir(out_dir):
-            os.mkdir(out_dir)
+        out_dir = Path(__file__).resolve().parent / pfuzz.constants.OUT_DIR
+        if not out_dir.is_dir():
+            out_dir.mkdir(parents=True)
         os.chdir(out_dir)
 
         run_process = ["csmith"]
