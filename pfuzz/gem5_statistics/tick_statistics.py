@@ -26,7 +26,7 @@ class Tick_statistics:
         decoded_overall_by_this_tick: int
         retired_overall_by_this_tick: int
 
-    def get_tick_statistics_list(path_to_trace: str) -> List[_Tick]:
+    def get_tick_statistics_list(self, path_to_trace: str) -> List[_Tick]:
         """
         Function for aquiring the information for each tick from a given trace
         in a form of a list of instances of Tick dataclass
