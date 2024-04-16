@@ -3,6 +3,9 @@ from typing import List
 
 
 class Tick_statistics:
+    def __init__(self):
+        pass
+
     """
     Class containing all the neccessary tools
     to gather O3 pipeline statistics
