@@ -3,7 +3,7 @@ from typing import List
 
 
 class Tick_statistics:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     """
