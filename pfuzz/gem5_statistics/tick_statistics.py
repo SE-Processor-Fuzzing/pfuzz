@@ -122,14 +122,13 @@ class Tick_statistics:
         ticks = {}
         ticks["so_far"] = self._Tick()
 
-        trace = open(path_to_trace, "r")
+        with open(path_to_trace, "r") as trace:
 
-        lines = trace.readlines()
-        current_tick = "0"
+            lines = trace.readlines()
+            current_tick = "0"
 
-        for i in range(0, len(lines)):
-            old_tick = current_tick
-            current_tick = self.proccess_stage(lines[i], ticks, old_tick)
+            for line in lines:
+                old_tick = current_tick
+                current_tick = self.proccess_stage(line, ticks, old_tick)
 
-        trace.close()
         return ticks
