@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import Dict
 
 
 class Tick_statistics:
@@ -18,20 +18,119 @@ class Tick_statistics:
         how many instructions were executed during this tick and up to this tick
         """
 
-        tick_number: int
-        fetched_during_this_tick: int
-        decoded_during_this_tick: int
-        retired_during_this_tick: int
-        fetched_overall_by_this_tick: int
-        decoded_overall_by_this_tick: int
-        retired_overall_by_this_tick: int
+        tick_number: int = 0
+        fetched_during_this_tick: int = 0
+        decoded_during_this_tick: int = 0
+        renamed_during_this_tick: int = 0
+        dispatched_during_this_tick: int = 0
+        issued_during_this_tick: int = 0
+        completed_during_this_tick: int = 0
+        retired_during_this_tick: int = 0
+        stored_during_this_tick: int = 0
 
-    def get_tick_statistics_list(self, path_to_trace: str) -> List[_Tick]:
+        fetched_so_far: int = 0
+        decoded_so_far: int = 0
+        renamed_so_far: int = 0
+        dispatched_so_far: int = 0
+        issued_so_far: int = 0
+        completed_so_far: int = 0
+        retired_so_far: int = 0
+        stored_so_far: int = 0
+
+    def update_so_far_stages_numbers(
+        self, ticks: Dict[str, _Tick], tick_number: str
+    ) -> None:
+        ticks[tick_number].fetched_so_far = ticks["so_far"].fetched_so_far
+        ticks[tick_number].decoded_so_far = ticks["so_far"].decoded_so_far
+        ticks[tick_number].renamed_so_far = ticks["so_far"].renamed_so_far
+        ticks[tick_number].dispatched_so_far = ticks["so_far"].dispatched_so_far
+        ticks[tick_number].issued_so_far = ticks["so_far"].issued_so_far
+        ticks[tick_number].completed_so_far = ticks["so_far"].completed_so_far
+        ticks[tick_number].retired_so_far = ticks["so_far"].retired_so_far
+        ticks[tick_number].stored_so_far = ticks["so_far"].stored_so_far
+
+    def proccess_stage(
+        self, stage: str, ticks: Dict[str, _Tick], current_tick: str
+    ) -> str:
+        stage = stage.removeprefix("O3PipeView:")
+        prefix = stage[0:3]
+        tick_number = (
+            stage.split(":")[1].rstrip()
+            if stage.split(":")[1].rstrip() != "0"
+            else current_tick
+        )
+
+        if tick_number not in ticks:
+            ticks[tick_number] = self._Tick()
+
+        if prefix == "fet":
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].fetched_during_this_tick += 1
+            ticks["so_far"].fetched_so_far += 1
+        elif prefix == "dec":
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].decoded_during_this_tick += 1
+            ticks["so_far"].decoded_so_far += 1
+        elif prefix == "ren":
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].renamed_during_this_tick += 1
+            ticks["so_far"].renamed_so_far += 1
+        elif prefix == "dis":
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].dispatched_during_this_tick += 1
+            ticks["so_far"].dispatched_so_far += 1
+        elif prefix == "iss":
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].issued_during_this_tick += 1
+            ticks["so_far"].issued_so_far += 1
+        elif prefix == "com":
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].completed_during_this_tick += 1
+            ticks["so_far"].completed_so_far += 1
+        elif prefix == "ret":
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].retired_during_this_tick += 1
+            ticks["so_far"].retired_so_far += 1
+
+            retire_tick = tick_number
+            self.update_so_far_stages_numbers(ticks, retire_tick)
+
+            tick_number = (
+                stage.split(":")[3].rstrip()
+                if stage.split(":")[3].rstrip() != "0"
+                else retire_tick
+            )
+
+            if tick_number not in ticks:
+                ticks[tick_number] = self._Tick()
+
+            ticks[tick_number].tick_number = int(tick_number)
+            ticks[tick_number].stored_during_this_tick += 1
+            ticks["so_far"].stored_so_far += 1
+
+        self.update_so_far_stages_numbers(ticks, tick_number)
+        return tick_number
+
+    def get_tick_statistics_list(self, path_to_trace: str) -> Dict[str, _Tick]:
         """
         Function for aquiring the information for each tick from a given trace
-        in a form of a list of instances of Tick dataclass
+        in a form of a dictionary of instances of Tick dataclass
 
         :path_to_trace: path to where the examined trace is stored
-        :return: list with Tick dataclass instances containing information for each tick from trace
+        :return: dictionary with Tick dataclass instances containing information for each tick from trace
         """
-        return []
+        ticks = {}
+        ticks["so_far"] = self._Tick()
+
+        trace = open(path_to_trace, "r")
+
+        lines = trace.readlines()
+        current_tick = "0"
+
+        for i in range(0, len(lines)):
+            old_tick = current_tick
+            current_tick = self.proccess_stage(lines[i], ticks, old_tick)
+
+        trace.close()
+        return ticks
+
