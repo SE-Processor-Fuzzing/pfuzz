@@ -133,4 +133,3 @@ class Tick_statistics:
 
         trace.close()
         return ticks
-
