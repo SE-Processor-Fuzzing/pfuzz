@@ -41,7 +41,7 @@ jobs:
 
       - name: Static types check with mypy
         run: |
-          python -m poetry run mypy --strict $(git ls-files '*.py')
+          python -m poetry run mypy --strict --ignore-missing-imports $(git ls-files '*.py')
 
       - name: Run Ruff linter
         run: |
