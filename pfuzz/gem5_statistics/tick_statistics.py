@@ -1,4 +1,3 @@
-import m5
 from dataclasses import dataclass
 from typing import Dict, List
 
@@ -156,14 +155,28 @@ class Tick_statistics:
         longest_tick_sequence.reverse()
         return longest_tick_sequence
 
+    def get_worst_fetch_decode_ratio_tick(self, ticks_list: List[_Tick]) -> _Tick:
+        highest_ratio = 0.0
+        problematic_tick = self._Tick()
+        for tick in ticks_list:
+            temp_ratio = 0.0
+            if tick.decoded_so_far == 0:
+                temp_ratio = float(tick.fetched_so_far)
+            else:
+                temp_ratio = tick.fetched_so_far / tick.decoded_so_far
+            if temp_ratio > highest_ratio:
+                highest_ratio = temp_ratio
+                problematic_tick = tick
+        return problematic_tick
+
     def get_stats_for_certain_ticks_exclusively(self, ticks: List[int]) -> None:
         """Function to be put into simulation to generate stats for each
         tick exclusively in stats.txt (not commulative stats)"""
         for tick in ticks:
             while True:
-                if m5.curTick() == tick - 1000:
-                    m5.stats.reset()
-                if m5.curTick() == tick:
-                    m5.stats.dump()
+                if m5.curTick() == tick - 1000:  # type: ignore[name-defined] # noqa: F821
+                    m5.stats.reset()  # type: ignore[name-defined] # noqa: F821
+                if m5.curTick() == tick:  # type: ignore[name-defined] # noqa: F821
+                    m5.stats.dump()  # type: ignore[name-defined] # noqa: F821
                     break
-                m5.simulate(1000)
+                m5.simulate(1000)  # type: ignore[name-defined] # noqa: F821
