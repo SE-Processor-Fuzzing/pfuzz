@@ -158,14 +158,14 @@ class Tick_statistics:
 
     def get_worst_fetch_decode_ratio_cycle_sequence(
         self, ticks_list: List[_Tick], cycle_number: int
-    ) -> _Tick:
+    ) -> List[_Tick]:
         worst_ratio = 0.0
-        worst_sequence: List[self._Tick] = []
+        worst_sequence = [self._Tick()]
 
         for i in range(1, len(ticks_list) - cycle_number):
             fetched = 0
             decoded = 0
-            temp_ratio = 0
+            temp_ratio = 0.0
             sequence_examined = []
 
             for j in range(i, cycle_number):
