@@ -157,10 +157,10 @@ class Tick_statistics:
         return longest_tick_sequence
 
     def get_worst_fetch_decode_ratio_cycle_sequence(
-        self, ticks_list: List[_Tick], cycle_number
+        self, ticks_list: List[_Tick], cycle_number: int
     ) -> _Tick:
-        worst_ratio = 0
-        worst_sequence = []
+        worst_ratio = 0.0
+        worst_sequence: List[self._Tick] = []
 
         for i in range(1, len(ticks_list) - cycle_number):
             fetched = 0
