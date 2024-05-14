@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import Dict, List
-import os
 
 
 class Tick_statistics:
