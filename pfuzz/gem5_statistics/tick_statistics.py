@@ -155,19 +155,29 @@ class Tick_statistics:
         longest_tick_sequence.reverse()
         return longest_tick_sequence
 
-    def get_worst_fetch_decode_ratio_tick(self, ticks_list: List[_Tick]) -> _Tick:
-        highest_ratio = 0.0
-        problematic_tick = self._Tick()
-        for tick in ticks_list:
+    def get_worst_fetch_decode_ratio_cycle_sequence(
+        self, ticks_list: List[_Tick], cycle_number: int
+    ) -> List[_Tick]:
+        worst_ratio = 0.0
+        worst_sequence = [self._Tick()]
+
+        for i in range(1, len(ticks_list) - cycle_number):
+            fetched = 0
+            decoded = 0
             temp_ratio = 0.0
-            if tick.decoded_so_far == 0:
-                temp_ratio = float(tick.fetched_so_far)
-            else:
-                temp_ratio = tick.fetched_so_far / tick.decoded_so_far
-            if temp_ratio > highest_ratio:
-                highest_ratio = temp_ratio
-                problematic_tick = tick
-        return problematic_tick
+            sequence_examined = []
+
+            for j in range(i, cycle_number):
+                sequence_examined.append(ticks_list[j])
+                fetched += ticks_list[j].fetched_during_this_tick
+                decoded += ticks_list[j].decoded_during_this_tick
+
+            temp_ratio = fetched if decoded == 0 else fetched / decoded
+
+            if temp_ratio > worst_ratio:
+                worst_ratio = temp_ratio
+
+        return worst_sequence
 
     def get_stats_for_certain_ticks_exclusively(self, ticks: List[int]) -> None:
         """Function to be put into simulation to generate stats for each
