@@ -1,7 +1,6 @@
 import unittest
 import tempfile
 import os
-import re
 from unittest.mock import Mock
 
 from pfuzz.mutation.mutation import Mutation
@@ -202,7 +201,7 @@ class TestAssemblyMutation(unittest.TestCase):
 
         mutation_count = sum(
             1
-            for orig_line, mut_line in zip(original_content, child_content)
+            for orig_line, mut_line in zip(original_content, child_content, strict=True)
             if orig_line != mut_line and mut_line.split()[0] in RISCV_INSTRUCTIONS
         )
 
