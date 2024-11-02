@@ -46,3 +46,7 @@ jobs:
       - name: Run Ruff linter
         run: |
           python -m poetry run ruff check $(git ls-files '*.py') --config 'pyproject.toml'
+
+      - name: Run tests
+        run: |
+          python -m unittest discover -s tests -p 'test_*.py'
