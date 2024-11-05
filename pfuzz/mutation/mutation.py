@@ -9,6 +9,11 @@ class Mutation:
     def __init__(self) -> None:
         pass
 
+    """
+    Class containing all the neccessary tools
+    to mutate Csmith configurations
+    """
+
     def crossover_func(
         self, chrom1: dict[str, str], chrom2: dict[str, str]
     ) -> tuple[dict[str, str], dict[str, str]]:
@@ -79,6 +84,10 @@ class Mutation:
         func_run: Callable[[], int],
         desired_output: float,
     ) -> list[tuple[dict[str, str], float]]:
+        """
+        Function to implement genetic evolution for a set
+        of Csmith starting configurations
+        """
 
         for index, item in enumerate(population):
             result = self.fitness_func(item[0], func_generate, func_run, desired_output)
@@ -126,6 +135,11 @@ RISCV_INSTRUCTIONS = [
 class Assembly_mutation:
     def __init__(self) -> None:
         pass
+
+    """
+    Class containing all the neccessary tools
+    to mutate assembly RISC-V code
+    """
 
     def find_labels_and_jumps(self, path: str) -> List[int]:
         label_jump_lines = []
